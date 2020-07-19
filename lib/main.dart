@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:cafeshop/Models/ListProducts.dart';
 import 'package:cafeshop/Services/ProductsAPI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart';
+
+import 'Models/Product.dart';
 
 void main() {
   runApp(MyApp());
@@ -97,7 +102,6 @@ class _FirstPageState extends State<FirstPage> {
   var store;
   @override
   void initState() {
-    store = fetchProduct();
     super.initState();
   }
 
@@ -127,7 +131,7 @@ class _FirstPageState extends State<FirstPage> {
                 autoPlay: true,
               ),
               items: [
-                Text("1"),
+                ProductsList(),
                 Text("2"),
                 Text("3"),
                 Text("4"),
@@ -200,6 +204,42 @@ class _FavoritePageState extends State<FavoritePage> {
     return Container(
       child: Column(
         children: [],
+      ),
+    );
+  }
+}
+
+class ProductsList extends StatefulWidget {
+  @override
+  _ProductsListState createState() => _ProductsListState();
+}
+
+class _ProductsListState extends State<ProductsList> {
+  @override
+  var store;
+  void initState() {
+    // TODO: implement initState
+    store = fetchProduct();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: FutureBuilder<ListProduct>(
+        future: store,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("lỗi!");
+          } else {
+            if (snapshot.hasData) {
+              print(snapshot.data.listProduct[0].id);
+              return Text("${snapshot.data.listProduct[0].body}");
+            } else {
+              return CircularProgressIndicator();
+            }
+          }
+        },
       ),
     );
   }
