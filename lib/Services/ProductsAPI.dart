@@ -6,8 +6,6 @@ import 'package:cafeshop/Models/Product.dart';
 import 'package:http/http.dart' as http;
 
 import '../Models/Product.dart';
-import '../Models/Product.dart';
-import '../Models/Product.dart';
 
 Future<ListProduct> fetchProduct() async {
   final response = await http

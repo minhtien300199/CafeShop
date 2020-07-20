@@ -167,9 +167,7 @@ class _FirstPageState extends State<FirstPage> {
                 );
               }).toList(),
             ),
-            Center(
-              child: Text(pageStore.toString()),
-            ),
+            Center(child: Text("Detail")),
             Row(
               // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +232,33 @@ class _ProductsListState extends State<ProductsList> {
           } else {
             if (snapshot.hasData) {
               print(snapshot.data.listProduct[0].id);
-              return Text("${snapshot.data.listProduct[0].body}");
+              return Container(child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return new Stack(
+                    children: [
+                      new Positioned(
+                          width: constraints.biggest.width,
+                          height: constraints.biggest.height,
+                          child: Image(
+                            image: AssetImage('assets/images/third.jpg'),
+                            fit: BoxFit.cover,
+                          )),
+                      new Positioned(
+                          top: constraints.biggest.height * 0.05,
+                          left: constraints.biggest.width * 0.03,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 1, color: Colors.blue)),
+                            child: Text(
+                              "${snapshot.data.listProduct[0].title}",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ))
+                    ],
+                  );
+                },
+              ));
             } else {
               return CircularProgressIndicator();
             }
