@@ -10,7 +10,7 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: [],
+        children: <Widget>[Text("This is favorite page")],
       ),
     );
   }

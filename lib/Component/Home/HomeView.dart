@@ -1,12 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class FirstPage extends StatefulWidget {
+class HomeView extends StatefulWidget {
+  HomeView() {}
   @override
   _FirstPageState createState() => _FirstPageState();
 }
 
-class _FirstPageState extends State<FirstPage> {
+class _FirstPageState extends State<HomeView> {
   String passValue = '';
   String fromChild = '';
   updateTitle(String data) {
