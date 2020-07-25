@@ -6,15 +6,11 @@ class Person extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Text(
-            'Cá nhân',
-            style: TextStyle(fontSize: 26, color: Colors.white),
-          ),
-        ),
-        body: ListView(children: <Widget>[
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {},
+       ListView(
+        children: <Widget>[
           ListTile(
               title: Text('Tài khoản cá nhân'),
               trailing: Icon(Icons.account_circle),
@@ -31,6 +27,8 @@ class Person extends StatelessWidget {
               title: Text('Đăng nhập'),
               trailing: Icon(Icons.accessibility),
               onTap: null)
-        ]));
+        ],
+      ),
+    );
   }
 }
