@@ -18,28 +18,11 @@ class _MyAppState extends State<MyApp> {
   static List<Widget> _widgetOptions = <Widget>[
     //HomeView
     Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(36.0),
-        child: Column(
-          children: <Widget>[
-            HomeView(),
-          ],
-        ),
-      ),
+      child: HomeView(),
     ),
-    //Favories
+    //Favorites
     Container(
-      color: Colors.white70,
-      child: Padding(
-        padding: const EdgeInsets.all(36.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FavoritePage(),
-            ]),
-      ),
+      child: FavoritePage(),
     ),
     //OrderPage
     Container(

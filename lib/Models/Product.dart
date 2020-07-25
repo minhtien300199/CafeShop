@@ -1,15 +1,24 @@
 class Product {
-  int id;
-  int userId;
-  String body;
-  String title;
-  Product({this.id, this.body, this.title, this.userId});
+  String id;
+  String productName;
+  String productDescription;
+  String categoryId;
+  List<dynamic> sizes;
+  List<dynamic> images;
+  Product(
+      {this.id,
+      this.productName,
+      this.productDescription,
+      this.sizes,
+      this.categoryId,
+      this.images});
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'],
-      userId: json['userId'],
-      body: json['body'],
-      title: json['title'],
-    );
+        id: json['id'],
+        productName: json['productName'],
+        productDescription: json['productDescription'],
+        sizes: json['sizes'],
+        categoryId: json['categoryId'],
+        images: json['images']);
   }
 }

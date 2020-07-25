@@ -8,10 +8,11 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[Text("This is favorite page")],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Favorite"),
       ),
+      body: Container(child: Text("Favorite here")),
     );
   }
 }
