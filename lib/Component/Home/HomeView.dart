@@ -34,7 +34,7 @@ class _FirstPageState extends State<HomeView> {
   var store;
 
   @override
-  void initState() {
+  void initState() async {
     store = fetchProduct();
     super.initState();
   }

@@ -34,6 +34,7 @@ dependencies:
   file_picker: 1.4.3+1
   dots_indicator: ^1.2.0
   progress_indicators: ^0.1.5
+  shared_preferences: ^0.5.8
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
