@@ -1,4 +1,5 @@
 import 'package:cafeshop/Models/ListProducts.dart';
+import 'package:cafeshop/Path.dart';
 import 'package:cafeshop/Services/ProductsAPI.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _FirstPageState extends State<HomeView> {
     super.initState();
   }
 
-  Widget handleLoadData() {
+  Widget handleLoadData(CarouselController controller) {
     return FutureBuilder<ListProduct>(
       future: store,
       builder: (context, snapshot) {
@@ -38,33 +39,64 @@ class _FirstPageState extends State<HomeView> {
         } else {
           if (snapshot.hasData) {
             print(snapshot.data.listProduct[0].id);
-            return Container(child: LayoutBuilder(
-              builder: (context, constraints) {
-                return new Stack(
-                  children: [
-                    new Positioned(
-                        width: constraints.biggest.width,
-                        height: constraints.biggest.height,
-                        child: Image(
-                          image:
-                              AssetImage('assets/images/iceblendedcoffee.jpg'),
-                          fit: BoxFit.fill,
+            return CarouselSlider(
+                carouselController: controller,
+                options: CarouselOptions(
+                  enlargeCenterPage: true,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  autoPlay: true,
+                ),
+                items: snapshot.data.listProduct.map((item) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            border: Border(
+                          top: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
+                          right: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
+                          bottom: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
+                          left: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
                         )),
-                    new Positioned(
-                        top: constraints.biggest.height * 0.05,
-                        left: constraints.biggest.width * 0.03,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.blue)),
-                          child: Text(
-                            "${snapshot.data.listProduct[0].productName}",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ))
-                  ],
-                );
-              },
-            ));
+                        child: Stack(
+                          children: [
+                            new Positioned(
+                                width: constraints.biggest.width,
+                                height: constraints.biggest.height,
+                                child: Image.network(
+                                  path['google-store'] + item.mainImage,
+                                  fit: BoxFit.fill,
+                                )),
+                            new Positioned(
+                                top: constraints.biggest.height * 0.05,
+                                left: constraints.biggest.width * 0.03,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1, color: Colors.blue)),
+                                  child: Text(
+                                    "${item.productName}",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ))
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }).toList());
           } else {
             return CircularProgressIndicator();
           }
@@ -104,51 +136,7 @@ class _FirstPageState extends State<HomeView> {
                     ),
                   ),
                 ),
-                CarouselSlider(
-                  carouselController: carouselCtrl,
-                  options: CarouselOptions(
-                    pageViewKey: PageStorageKey(pageStore),
-                    enlargeCenterPage: true,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    autoPlay: true,
-                  ),
-                  items: [
-                    handleLoadData(),
-                    Text("2"),
-                    Text("3"),
-                    Text("4"),
-                    Text("5"),
-                    Text("6"),
-                  ].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: i,
-                          decoration: BoxDecoration(
-                              border: Border(
-                            top: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                            right: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                            bottom: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                            left: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                          )),
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
+                handleLoadData(carouselCtrl),
                 Center(child: Text("Detail")),
                 Row(
                   // crossAxisAlignment: CrossAxisAlignment.center,
@@ -173,84 +161,32 @@ class _FirstPageState extends State<HomeView> {
   }
 }
 
-/**
- * Container(
-        padding: EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-              child: Text(
-                "Best sale!",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            CarouselSlider(
-              carouselController: carouselCtrl,
-              options: CarouselOptions(
-                pageViewKey: PageStorageKey(pageStore),
-                enlargeCenterPage: true,
-                height: MediaQuery.of(context).size.height * 0.2,
-                autoPlay: true,
-              ),
-              items: [
-                Text("1"),
-                Text("2"),
-                Text("3"),
-                Text("4"),
-                Text("5"),
-                Text("6"),
-              ].map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: i,
-                      decoration: BoxDecoration(
-                          border: Border(
-                        top: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                        right: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                        bottom: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                        left: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                      )),
-                    );
-                  },
-                );
-              }).toList(),
-            ),
-            Center(child: Text("Detail")),
-            Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    carouselCtrl.previousPage();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_forward),
-                  onPressed: () {
-                    carouselCtrl.nextPage();
-                  },
-                ),
-              ],
-            )
-          ],
-        ));
- */
+//item widget
+// LayoutBuilder(
+//                 builder: (context, constraints) {
+//                   return new Stack(
+//                     children: [
+//                       new Positioned(
+//                           width: constraints.biggest.width,
+//                           height: constraints.biggest.height,
+//                           child: Image.network(
+//                             path['google-store'] +
+//                                 'images/iceblendedcoffee.jpg',
+//                             fit: BoxFit.fill,
+//                           )),
+//                       new Positioned(
+//                           top: constraints.biggest.height * 0.05,
+//                           left: constraints.biggest.width * 0.03,
+//                           child: DecoratedBox(
+//                             decoration: BoxDecoration(
+//                                 border:
+//                                     Border.all(width: 1, color: Colors.blue)),
+//                             child: Text(
+//                               "${snapshot.data.listProduct[0].productName}",
+//                               style: TextStyle(color: Colors.red),
+//                             ),
+//                           ))
+//                     ],
+//                   );
+//                 },
+//               )

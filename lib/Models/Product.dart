@@ -3,6 +3,7 @@ class Product {
   String productName;
   String productDescription;
   String categoryId;
+  String mainImage;
   List<dynamic> sizes;
   List<dynamic> images;
   Product(
@@ -11,7 +12,8 @@ class Product {
       this.productDescription,
       this.sizes,
       this.categoryId,
-      this.images});
+      this.images,
+      this.mainImage});
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
         id: json['id'],
@@ -19,6 +21,7 @@ class Product {
         productDescription: json['productDescription'],
         sizes: json['sizes'],
         categoryId: json['categoryId'],
-        images: json['images']);
+        images: json['images'],
+        mainImage: json['mainImage']);
   }
 }
