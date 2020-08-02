@@ -7,10 +7,10 @@ Future<ListCategory> fetchCategory() async {
   final response = await http.get(
       Uri.encodeFull("https://caffeeshopbackend.herokuapp.com/category/all"));
   if (response.statusCode == 200) {
+    // print(jsonDecode(response.body)['data']);
     List<dynamic> list = jsonDecode(response.body)['data']
         .map((item) => Category.fromJson(item))
         .toList();
-    print(list);
     ListCategory cats = new ListCategory(listCategory: list);
     // LocalStore local = new LocalStore();
     // local.saveData(cats, 'listCategory');

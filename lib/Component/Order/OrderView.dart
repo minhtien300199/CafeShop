@@ -1,5 +1,7 @@
 import 'package:cafeshop/Models/ListCategory.dart';
+import 'package:cafeshop/Path.dart';
 import 'package:cafeshop/Services/CategoryAPI.dart';
+import 'package:cafeshop/uri.dart';
 import 'package:flutter/material.dart';
 
 class OrderPage extends StatefulWidget {
@@ -16,18 +18,18 @@ class _OrderPageState extends State<OrderPage>
   Future<ListCategory> listCate;
   TabController _tabController;
   List<Widget> list = new List<Widget>();
+  SliverGridDelegate sliverGrid;
   @override
   void initState() {
     super.initState();
     listCate = fetchCategory();
+    sliverGrid = new SliverGridDelegateWithMaxCrossAxisExtent(
+      mainAxisSpacing: 0,
+      maxCrossAxisExtent: 250,
+      childAspectRatio: 1,
+    );
     // _tabController = TabController(vsync: this, length: list.length);
   }
-
-  // @override
-  // void dispose() {
-  //   _tabController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +53,62 @@ class _OrderPageState extends State<OrderPage>
               body: TabBarView(
                 controller: _tabController,
                 children: snapshot.data.listCategory.map((item) {
-                  return Center(
-                    child: Text('This is ${item.name} tab'),
+                  List<Widget> productView = new List<Widget>();
+                  for (var product in item.products) {
+                    productView.add(new Container(
+                      padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.only(bottom: 20, left: 5, right: 10),
+                      constraints: BoxConstraints(),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black38,
+                                blurRadius: 6,
+                                spreadRadius: 2,
+                                offset: Offset(3, 3))
+                          ],
+                          border: Border.all(
+                              width: 1,
+                              style: BorderStyle.solid,
+                              color: Colors.grey)),
+                      child: Row(
+                        children: <Widget>[
+                          Image.network(
+                            path['google-store'] + product.mainImage,
+                            width: 150,
+                            height: 150,
+                          ),
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text(
+                                  product.productName,
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(product.productDescription,
+                                    style: TextStyle(fontSize: 10)),
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.add_circle_outline,
+                                      color: Colors.greenAccent,
+                                      size: 30,
+                                    ),
+                                    onPressed: null)
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ));
+                  }
+                  return ListView(
+                    padding: EdgeInsets.only(top: 5),
+                    semanticChildCount: productView.length,
+                    // gridDelegate: sliverGrid,
+                    scrollDirection: Axis.vertical,
+                    children: productView,
                   );
                 }).toList(),
               ));
