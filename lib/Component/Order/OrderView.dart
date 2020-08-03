@@ -89,13 +89,12 @@ class _OrderPageState extends State<OrderPage>
                                 ),
                                 Text(product.productDescription,
                                     style: TextStyle(fontSize: 10)),
-                                IconButton(
-                                    icon: Icon(
-                                      Icons.add_circle_outline,
-                                      color: Colors.greenAccent,
-                                      size: 30,
-                                    ),
-                                    onPressed: null)
+                                RaisedButton.icon(
+                                  onPressed: () => {},
+                                  icon: Icon(Icons.add_shopping_cart),
+                                  label: Text("Chi tiết"),
+                                  color: Colors.orange,
+                                )
                               ],
                             ),
                           )
