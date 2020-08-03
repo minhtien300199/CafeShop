@@ -1,8 +1,10 @@
 import 'package:cafeshop/Models/ListProducts.dart';
+import 'package:cafeshop/Path.dart';
 import 'package:cafeshop/Services/ProductsAPI.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class HomeView extends StatefulWidget {
   HomeView() {}
@@ -13,14 +15,22 @@ class HomeView extends StatefulWidget {
 class _FirstPageState extends State<HomeView> {
   String passValue = '';
   String fromChild = '';
-
+  int active = 0;
+  int total = 1;
   updateTitle(String data) {
     setState(() {
       fromChild = data;
     });
   }
 
-  final _formKey = GlobalKey<FormState>();
+  void updateList(int value) {
+    setState(() {
+      active = value;
+    });
+    print("value is $value and total is: $total");
+  }
+
+  // final _formKey = GlobalKey<FormState>();
   var store;
 
   @override
@@ -29,7 +39,8 @@ class _FirstPageState extends State<HomeView> {
     super.initState();
   }
 
-  Widget handleLoadData() {
+  Widget customCarousel(
+      CarouselController controller, Function onchangeCarousel) {
     return FutureBuilder<ListProduct>(
       future: store,
       builder: (context, snapshot) {
@@ -37,34 +48,69 @@ class _FirstPageState extends State<HomeView> {
           return Text("lỗi!");
         } else {
           if (snapshot.hasData) {
-            print(snapshot.data.listProduct[0].id);
-            return Container(child: LayoutBuilder(
-              builder: (context, constraints) {
-                return new Stack(
-                  children: [
-                    new Positioned(
-                        width: constraints.biggest.width,
-                        height: constraints.biggest.height,
-                        child: Image(
-                          image:
-                              AssetImage('assets/images/iceblendedcoffee.jpg'),
-                          fit: BoxFit.fill,
+            total = snapshot.data.listProduct.length;
+            return CarouselSlider(
+                carouselController: controller,
+                options: CarouselOptions(
+                  initialPage: 0,
+                  enlargeCenterPage: true,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  autoPlay: true,
+                  onPageChanged: (index, reason) {
+                    onchangeCarousel(index);
+                  },
+                ),
+                items: snapshot.data.listProduct.map((item) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            border: Border(
+                          top: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
+                          right: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
+                          bottom: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
+                          left: BorderSide(
+                              width: 1,
+                              color: Colors.black,
+                              style: BorderStyle.solid),
                         )),
-                    new Positioned(
-                        top: constraints.biggest.height * 0.05,
-                        left: constraints.biggest.width * 0.03,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.blue)),
-                          child: Text(
-                            "${snapshot.data.listProduct[0].productName}",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ))
-                  ],
-                );
-              },
-            ));
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            new Positioned(
+                                width: constraints.biggest.width,
+                                height: constraints.biggest.height,
+                                child: Image.network(
+                                  path['google-store'] + item.mainImage,
+                                  fit: BoxFit.fill,
+                                )),
+                            Text(
+                              "${item.productName}",
+                              style: TextStyle(
+                                  color: Colors.greenAccent,
+                                  fontSize: 25,
+                                  shadows: [
+                                    Shadow(
+                                        color: Colors.amberAccent,
+                                        blurRadius: 10)
+                                  ]),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }).toList());
           } else {
             return CircularProgressIndicator();
           }
@@ -97,160 +143,31 @@ class _FirstPageState extends State<HomeView> {
               children: [
                 Center(
                   child: Text(
-                    "Best sale!",
+                    "Best sale",
                     style: TextStyle(
                       color: Colors.red,
-                      fontSize: 16,
+                      fontSize: 30,
                     ),
                   ),
                 ),
-                CarouselSlider(
-                  carouselController: carouselCtrl,
-                  options: CarouselOptions(
-                    pageViewKey: PageStorageKey(pageStore),
-                    enlargeCenterPage: true,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    autoPlay: true,
-                  ),
-                  items: [
-                    handleLoadData(),
-                    Text("2"),
-                    Text("3"),
-                    Text("4"),
-                    Text("5"),
-                    Text("6"),
-                  ].map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: i,
-                          decoration: BoxDecoration(
-                              border: Border(
-                            top: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                            right: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                            bottom: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                            left: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                                style: BorderStyle.solid),
-                          )),
-                        );
-                      },
+                customCarousel(carouselCtrl, this.updateList),
+                FutureBuilder(
+                  future: store,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Center(
+                        child: DotsIndicator(
+                          dotsCount: this.total,
+                          position: this.active.toDouble(),
+                        ),
+                      );
+                    }
+                    return JumpingDotsProgressIndicator(
+                      fontSize: 50.0,
                     );
-                  }).toList(),
-                ),
-                Center(child: Text("Detail")),
-                Row(
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        carouselCtrl.previousPage();
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.arrow_forward),
-                      onPressed: () {
-                        carouselCtrl.nextPage();
-                      },
-                    ),
-                  ],
+                  },
                 )
               ],
             )));
   }
 }
-
-/**
- * Container(
-        padding: EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
-        child: Column(
-          children: [
-            Center(
-              child: Text(
-                "Best sale!",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            CarouselSlider(
-              carouselController: carouselCtrl,
-              options: CarouselOptions(
-                pageViewKey: PageStorageKey(pageStore),
-                enlargeCenterPage: true,
-                height: MediaQuery.of(context).size.height * 0.2,
-                autoPlay: true,
-              ),
-              items: [
-                Text("1"),
-                Text("2"),
-                Text("3"),
-                Text("4"),
-                Text("5"),
-                Text("6"),
-              ].map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: i,
-                      decoration: BoxDecoration(
-                          border: Border(
-                        top: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                        right: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                        bottom: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                        left: BorderSide(
-                            width: 1,
-                            color: Colors.black,
-                            style: BorderStyle.solid),
-                      )),
-                    );
-                  },
-                );
-              }).toList(),
-            ),
-            Center(child: Text("Detail")),
-            Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    carouselCtrl.previousPage();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_forward),
-                  onPressed: () {
-                    carouselCtrl.nextPage();
-                  },
-                ),
-              ],
-            )
-          ],
-        ));
- */
