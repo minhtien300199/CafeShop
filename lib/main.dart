@@ -3,6 +3,7 @@ import './Component/Login/Login.dart';
 import './Component/Favorite/FavoriteView.dart';
 import './Component/Home/HomeView.dart';
 import './Component/Order/OrderView.dart';
+import './Component/Login/Person.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,16 +31,8 @@ class _MyAppState extends State<MyApp> {
     ),
     //Login
     Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(36.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              LoginView(),
-            ]),
-      ),
+      // color: Colors.white,
+      child: Person(),
     ),
   ];
 

@@ -7,9 +7,9 @@ class Person extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
-      routes: {},
-       ListView(
+      home: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ListTile(
               title: Text('Tài khoản cá nhân'),
@@ -24,9 +24,17 @@ class Person extends StatelessWidget {
               trailing: Icon(Icons.payment),
               onTap: null),
           ListTile(
-              title: Text('Đăng nhập'),
-              trailing: Icon(Icons.accessibility),
-              onTap: null)
+            title: Text('Đăng nhập'),
+            trailing: Icon(Icons.accessibility),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginView(),
+                ),
+              ),
+            },
+          )
         ],
       ),
     );
