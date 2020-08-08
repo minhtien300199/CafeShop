@@ -39,6 +39,7 @@ class _OrderPageState extends State<OrderPage>
         if (snapshot.hasData) {
           return Scaffold(
               appBar: AppBar(
+                title: Text('Order'),
                 bottom: TabBar(
                     controller: _tabController = new TabController(
                         length: snapshot.data.listCategory.length,
@@ -79,25 +80,95 @@ class _OrderPageState extends State<OrderPage>
                             width: 150,
                             height: 150,
                           ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  product.productName,
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                Text(product.productDescription,
-                                    style: TextStyle(fontSize: 10)),
-                                RaisedButton.icon(
-                                  onPressed: () => {},
-                                  icon: Icon(Icons.add_shopping_cart),
-                                  label: Text("Chi tiết"),
-                                  color: Colors.orange,
-                                )
-                              ],
-                            ),
-                          )
+                          Expanded(
+                              flex: 2,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: LayoutBuilder(
+                                    builder: (context, constrain) {
+                                  if (constrain.maxWidth < 200) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          product.productName,
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                        Text(product.productDescription,
+                                            style: TextStyle(fontSize: 10)),
+                                        Text('Price: 50,000 VNĐ'),
+                                        SizedBox(
+                                          width: 110,
+                                          child: RaisedButton.icon(
+                                            onPressed: () => {},
+                                            icon: Icon(Icons.add_shopping_cart),
+                                            label: Text("Detail"),
+                                            color: Colors.orange,
+                                            padding: EdgeInsets.all(10),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 110,
+                                          child: RaisedButton.icon(
+                                            onPressed: () => {},
+                                            icon: Icon(Icons.favorite_border),
+                                            label: Text("Favorite"),
+                                            color: Colors.orange,
+                                            padding: EdgeInsets.all(10),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          product.productName,
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                        Text(product.productDescription,
+                                            style: TextStyle(fontSize: 10)),
+                                        Text('Price: 50,000 VNĐ'),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 110,
+                                              child: RaisedButton.icon(
+                                                onPressed: () => {},
+                                                icon: Icon(
+                                                    Icons.add_shopping_cart),
+                                                label: Text("Detail"),
+                                                color: Colors.orange,
+                                                padding: EdgeInsets.all(10),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 110,
+                                              child: RaisedButton.icon(
+                                                onPressed: () => {},
+                                                icon:
+                                                    Icon(Icons.favorite_border),
+                                                label: Text("Favorite"),
+                                                color: Colors.orange,
+                                                padding: EdgeInsets.all(10),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  }
+                                }),
+                              ))
                         ],
                       ),
                     ));
@@ -118,15 +189,3 @@ class _OrderPageState extends State<OrderPage>
     );
   }
 }
-
-/**
- *  myTabs.map((Tab tab) {
-          final String label = tab.text.toLowerCase();
-          return Center(
-            child: Text(
-              'This is the $label tab',
-              style: const TextStyle(fontSize: 20),
-            ),
-          );
-        }).toList(),
- */
