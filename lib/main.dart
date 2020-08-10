@@ -69,6 +69,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ],
           currentIndex: _selectedIndex,
+          // selectedIconTheme: Colors.amber[800],
           selectedItemColor: Colors.amber[800],
           backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,

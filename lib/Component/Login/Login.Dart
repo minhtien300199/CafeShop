@@ -1,13 +1,29 @@
 import 'package:cafeshop/Models/User.dart';
 import 'package:cafeshop/Services/UserAPI.dart';
 import 'package:flutter/material.dart';
+import '../Login/Person.dart';
+import 'package:cafeshop/Models/User.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
+  LoginView({Key key}) : super(key: key);
+
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  Future<User> futureUser;
+
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
-  // const LoginView({Key key}) : super(key: key);
-  LoginView();
+  void setInfoUser() {
+    setState(() {
+      futureUser = loginUser(emailController.text, passwordController.text);
+      // print(user.id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -70,9 +86,16 @@ class LoginView extends StatelessWidget {
                   minWidth: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   onPressed: () {
-                    UserAPI userAPI = new UserAPI();
-                    userAPI.loginUser(
-                        emailController.text, passwordController.text);
+                    setInfoUser();
+                    FutureBuilder<User>(
+                        future: futureUser,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            print(snapshot.data);
+                            return Person(user: snapshot.data);
+                          }
+                        });
+                    //Navigator.pop(context);
                   },
                   child: Text(
                     "Login",
