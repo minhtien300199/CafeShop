@@ -2,38 +2,49 @@ import 'package:cafeshop/Services/UserAPI.dart';
 import 'package:flutter/material.dart';
 import '../Login/Login.dart';
 import 'package:cafeshop/Models/User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Person extends StatefulWidget {
-  final User user;
+  // final User user;
   //final user.userName;
-  Person({Key key, this.user}) : super(key: key);
+  Person({Key key}) : super(key: key);
   @override
   _PersonState createState() => _PersonState();
 }
 
 class _PersonState extends State<Person> {
-  bool hasData = false;
-  Future<User> futureUser;
-  void setUserInfo() {
-    //@override
+  //bool hasData = false;
+  // Future<User> futureUser;
+  // void setUserInfo() {
+  //   //@override
+  //   setState(() {
+  //     if (widget.user == null) {
+  //       // print("true");
+  //       hasData = false;
+  //     } else
+  //       hasData = true;
+  //   });
+  // }
+  String name;
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      if (widget.user == null) {
-        // print("true");
-        hasData = false;
-      } else
-        hasData = true;
+      name = prefs.getString('stringValue') ?? "0";
     });
+
+    //return stringValue;
   }
 
   @override
   Widget build(BuildContext context) {
-    setUserInfo();
-    print(hasData);
+    getStringValuesSF();
+    // setUserInfo();
+    // print(hasData);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Container(
-            child: hasData == true
+            child: name != "0"
                 ? Row(
                     children: [
                       Padding(
@@ -42,7 +53,7 @@ class _PersonState extends State<Person> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text("${widget.user.userName}"),
+                        child: Text('$name'),
                       ),
                     ],
                   )
@@ -76,18 +87,27 @@ class _PersonState extends State<Person> {
                 title: Text('Thông tin thanh toán'),
                 trailing: Icon(Icons.payment),
                 onTap: null),
-            ListTile(
-              title: Text('Đăng nhập'),
-              trailing: Icon(Icons.accessibility),
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginView(),
-                  ),
-                ),
-              },
-            )
+            name == '0'
+                ? ListTile(
+                    title: Text('Đăng nhập'),
+                    trailing: Icon(Icons.accessibility),
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginView(),
+                        ),
+                      ),
+                    },
+                  )
+                : ListTile(
+                    title: Text("Đăng xuất"),
+                    onTap: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      setState(() {
+                        prefs.remove('stringValue');
+                      });
+                    })
           ],
         ),
       ),
