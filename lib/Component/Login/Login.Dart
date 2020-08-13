@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:cafeshop/Models/User.dart';
 import 'package:cafeshop/Services/UserAPI.dart';
 import 'package:flutter/material.dart';
-import '../Login/Person.dart';
-import 'package:cafeshop/Models/User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import './ProgressHUD.dart';
 
 class LoginView extends StatefulWidget {
   LoginView({Key key}) : super(key: key);
@@ -12,103 +14,193 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  Future<User> futureUser;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+  addUserToSharedPreferences(UserResponseModel user) async {
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    sharedPref.setString('stringValue', user.userName);
+  }
 
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  bool hidePassword = true;
+  User userRequest;
+  // bool isLoading = false;
+  bool isApiCallProcess = false;
 
-  void setInfoUser() {
-    setState(() {
-      futureUser = loginUser(emailController.text, passwordController.text);
-      // print(user.id);
-    });
+  @override
+  void initState() {
+    super.initState();
+    userRequest = new User();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          width: 400,
-          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'LOGIN',
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
-              ),
-              SizedBox(
-                height: 70.0,
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  fit: BoxFit.contain,
-                ),
-              ),
-              SizedBox(
-                height: 45.0,
-              ),
-              TextFormField(
-                controller: emailController,
-                obscureText: false,
-                style: TextStyle(fontSize: 20),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 50.0, 15.0),
-                    hintText: "Email",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0))),
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                style: TextStyle(fontSize: 20),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    hintText: "Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32.0))),
-              ),
-              SizedBox(
-                height: 35.0,
-              ),
-              Material(
-                elevation: 5.0,
-                borderRadius: BorderRadius.circular(30.0),
-                color: Color(0xff01A0C7),
-                child: MaterialButton(
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  onPressed: () {
-                    setInfoUser();
-                    FutureBuilder<User>(
-                        future: futureUser,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            print(snapshot.data);
-                            return Person(user: snapshot.data);
+    return ProgressHUD(
+      child: _uiSetup(context),
+      inAsyncCall: isApiCallProcess,
+      opacity: 0.3,
+    );
+  }
+
+  @override
+  Widget _uiSetup(BuildContext context) {
+    return Scaffold(
+      key: scaffoldKey,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Stack(children: <Widget>[
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                margin: EdgeInsets.symmetric(vertical: 85, horizontal: 20),
+                // decoration: BoxDecoration(
+                //  //   borderRadius: BorderRadius.circular(20),
+                //     color: Theme.of(context).bottomAppBarColor,
+                //     boxShadow: [
+                //       BoxShadow(
+                //           color: Theme.of(context).hintColor.withOpacity(0.3),
+                //           offset: Offset(0, 10),
+                //           blurRadius: 20)
+                //     ]),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 300,
+                        // width: 300,
+                        child: Image.asset("assets/images/logoCoffee.png",
+                            fit: BoxFit.cover),
+                      ),
+                      SizedBox(height: 20),
+                      new TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        onSaved: (input) => userRequest.userName = input,
+                        validator: (input) => !input.contains("@")
+                            ? "Email ID shoud be valid"
+                            : null,
+                        style: TextStyle(fontSize: 20),
+                        decoration: new InputDecoration(
+                          hintText: "Email address",
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context)
+                                  .accentColor
+                                  .withOpacity(0.2),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).accentColor,
+                            ),
+                          ),
+                          prefixIcon: Icon(Icons.email,
+                              color: Theme.of(context).accentColor),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      new TextFormField(
+                        keyboardType: TextInputType.text,
+                        validator: (input) => input.length < 3
+                            ? "Password shoud be more than 3 characters"
+                            : null,
+                        style: TextStyle(fontSize: 20),
+                        onSaved: (input) => userRequest.password = input,
+                        obscureText: hidePassword,
+                        decoration: new InputDecoration(
+                          hintText: "Password",
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context)
+                                  .accentColor
+                                  .withOpacity(0.2),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).accentColor,
+                            ),
+                          ),
+                          prefixIcon: Icon(Icons.lock,
+                              color: Theme.of(context).accentColor),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                hidePassword = !hidePassword;
+                              });
+                            },
+                            color:
+                                Theme.of(context).accentColor.withOpacity(0.4),
+                            icon: Icon(hidePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 50),
+                      FlatButton(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 80),
+                        onPressed: () {
+                          if (validateAndSave()) {
+                            setState(() {
+                              isApiCallProcess = true;
+                            });
+
+                            UserAPI api = new UserAPI();
+                            api.loginUser(userRequest).then((value) {
+                              setState(() {
+                                isApiCallProcess = false;
+                              });
+
+                              if (value.authenticate.isNotEmpty) {
+                                final snackbar = SnackBar(
+                                  content: Text("Login Successfull!"),
+                                );
+                                scaffoldKey.currentState.showSnackBar(snackbar);
+                                addUserToSharedPreferences(value);
+                                // sleep(Duration(seconds: 10));
+                                Navigator.pop(context);
+                              } else {
+                                final snackbar = SnackBar(
+                                  content: Text(
+                                      "Email or password is invalid! Please try again!"),
+                                );
+                                scaffoldKey.currentState.showSnackBar(snackbar);
+                              }
+                            });
                           }
-                        });
-                    //Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Login",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                        },
+                        child: Text(
+                          "Log In",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                        color: Theme.of(context).accentColor,
+                        shape: StadiumBorder(),
+                      ),
+                      // SizedBox(height: 115),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ])
+          ],
         ),
       ),
     );
+  }
+
+  bool validateAndSave() {
+    final form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 }
