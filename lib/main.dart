@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './Component/Login/Login.dart';
+import './Component/Person/Login.dart';
 import './Component/Favorite/FavoriteView.dart';
 import './Component/Home/HomeView.dart';
 import './Component/Order/OrderView.dart';
-import './Component/Login/Person.dart';
+import './Component/Person/Person.dart';
 
 void main() => runApp(MyApp());
 
