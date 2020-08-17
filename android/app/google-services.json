@@ -1,34 +1,79 @@
 {
   "project_info": {
-    "project_number": "107105484868",
-    "firebase_url": "https://my-coffee-shop-55613.firebaseio.com",
-    "project_id": "my-coffee-shop-55613",
-    "storage_bucket": "my-coffee-shop-55613.appspot.com"
+    "project_number": "881925196646",
+    "firebase_url": "https://flutter-login-599be.firebaseio.com",
+    "project_id": "flutter-login-599be",
+    "storage_bucket": "flutter-login-599be.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:107105484868:android:d71e2742a9b0d26053bc11",
+        "mobilesdk_app_id": "1:881925196646:android:5dcc36d5896943a85b96a7",
         "android_client_info": {
-          "package_name": "com.example.cafeshop"
+          "package_name": "com.example.Login_with_facebook"
         }
       },
       "oauth_client": [
         {
-          "client_id": "107105484868-af37ul67qe9bc0apn62b86dl010k0t8t.apps.googleusercontent.com",
+          "client_id": "881925196646-mm00mdr7rcm863jatrrobtv0oija8u5c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.Login_with_facebook",
+            "certificate_hash": "807ecfefd6ce9848bb8e9812e885aef581cbc3dc"
+          }
+        },
+        {
+          "client_id": "881925196646-duva58a3ad26n4riiangf4u1bq2ovm1m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDJJ_M6tFd33_D29eip5KD08lhpTU8wBK0"
+          "current_key": "AIzaSyDvKcoZ6Xlp8GINnRm2WZtuxIWG861xhdE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "107105484868-af37ul67qe9bc0apn62b86dl010k0t8t.apps.googleusercontent.com",
+              "client_id": "881925196646-duva58a3ad26n4riiangf4u1bq2ovm1m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881925196646:android:7d08580bf33bd9b45b96a7",
+        "android_client_info": {
+          "package_name": "com.example.cafeshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881925196646-a7v7ebkerm168143hvrrqvhsr0uajk3i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cafeshop",
+            "certificate_hash": "807ecfefd6ce9848bb8e9812e885aef581cbc3dc"
+          }
+        },
+        {
+          "client_id": "881925196646-duva58a3ad26n4riiangf4u1bq2ovm1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvKcoZ6Xlp8GINnRm2WZtuxIWG861xhdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881925196646-duva58a3ad26n4riiangf4u1bq2ovm1m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

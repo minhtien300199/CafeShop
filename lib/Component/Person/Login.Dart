@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:cafeshop/Models/User.dart';
-import 'package:cafeshop/Services/UserAPI.dart';
+import '../Person/Person.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './ProgressHUD.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 class LoginView extends StatefulWidget {
   LoginView({Key key}) : super(key: key);
@@ -14,6 +17,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  Person person;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
   addUserToSharedPreferences(UserResponseModel user) async {
@@ -26,10 +30,55 @@ class _LoginViewState extends State<LoginView> {
   // bool isLoading = false;
   bool isApiCallProcess = false;
 
+  final _auth = FirebaseAuth.instance;
+  final _facebooklogin = FacebookLogin();
+  bool _isLoggedIn = false;
+  String _message;
+  String _avatar;
+
+  Future _loginWithFacebook() async {
+    final result = await _facebooklogin.logIn(['email']);
+
+    if (result.status == FacebookLoginStatus.loggedIn) {
+      final credential = FacebookAuthProvider.getCredential(
+          accessToken: result.accessToken.token);
+      //Lấy thông tin User qua credential có giá trị token đã đăng nhập
+      final user = (await _auth.signInWithCredential(credential)).user;
+      setState(() {
+        print((user.toString()));
+        _message = "Logged in as ${user.displayName}";
+        _avatar = user.photoUrl;
+        _isLoggedIn = true;
+      });
+    }
+  }
+
+  Future _logout() async {
+    // SignOut khỏi Firebase Auth
+    await _auth.signOut();
+    // Logout facebook
+    await _facebooklogin.logOut();
+    setState(() {
+      _isLoggedIn = false;
+    });
+  }
+
+  Future _checkLogin() async {
+    // Kiểm tra xem user đã đăng nhập hay chưa
+    final user = await _auth.currentUser();
+    if (user != null) {
+      setState(() {
+        //_message = "Logged in as ${user.toString()}";
+        _isLoggedIn = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    userRequest = new User();
+    //userRequest = new User();
+    _checkLogin();
   }
 
   @override
@@ -53,15 +102,6 @@ class _LoginViewState extends State<LoginView> {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                 margin: EdgeInsets.symmetric(vertical: 85, horizontal: 20),
-                // decoration: BoxDecoration(
-                //  //   borderRadius: BorderRadius.circular(20),
-                //     color: Theme.of(context).bottomAppBarColor,
-                //     boxShadow: [
-                //       BoxShadow(
-                //           color: Theme.of(context).hintColor.withOpacity(0.3),
-                //           offset: Offset(0, 10),
-                //           blurRadius: 20)
-                //     ]),
                 child: Form(
                   key: formKey,
                   child: Column(
@@ -72,123 +112,104 @@ class _LoginViewState extends State<LoginView> {
                         child: Image.asset("assets/images/logoCoffee.png",
                             fit: BoxFit.cover),
                       ),
-                      SizedBox(height: 20),
-                      new TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        onSaved: (input) => userRequest.userName = input,
-                        validator: (input) => !input.contains("@")
-                            ? "Email ID shoud be valid"
-                            : null,
-                        style: TextStyle(fontSize: 20),
-                        decoration: new InputDecoration(
-                          hintText: "Email address",
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .accentColor
-                                  .withOpacity(0.2),
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).accentColor,
-                            ),
-                          ),
-                          prefixIcon: Icon(Icons.email,
-                              color: Theme.of(context).accentColor),
+                      //SizedBox(height: 20),
+                      // new TextFormField(
+                      //   keyboardType: TextInputType.emailAddress,
+                      //   onSaved: (input) => userRequest.userName = input,
+                      //   validator: (input) => !input.contains("@")
+                      //       ? "Email ID shoud be valid"
+                      //       : null,
+                      //   style: TextStyle(fontSize: 20),
+                      //   decoration: new InputDecoration(
+                      //     hintText: "Email address",
+                      //     enabledBorder: UnderlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //         color: Theme.of(context)
+                      //             .accentColor
+                      //             .withOpacity(0.2),
+                      //       ),
+                      //     ),
+                      //     focusedBorder: UnderlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //         color: Theme.of(context).accentColor,
+                      //       ),
+                      //     ),
+                      //     prefixIcon: Icon(Icons.email,
+                      //         color: Theme.of(context).accentColor),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      // new TextFormField(
+                      //   keyboardType: TextInputType.text,
+                      //   validator: (input) => input.length < 3
+                      //       ? "Password shoud be more than 3 characters"
+                      //       : null,
+                      //   style: TextStyle(fontSize: 20),
+                      //   onSaved: (input) => userRequest.password = input,
+                      //   obscureText: hidePassword,
+                      //   decoration: new InputDecoration(
+                      //     hintText: "Password",
+                      //     enabledBorder: UnderlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //         color: Theme.of(context)
+                      //             .accentColor
+                      //             .withOpacity(0.2),
+                      //       ),
+                      //     ),
+                      //     focusedBorder: UnderlineInputBorder(
+                      //       borderSide: BorderSide(
+                      //         color: Theme.of(context).accentColor,
+                      //       ),
+                      //     ),
+                      //     prefixIcon: Icon(Icons.lock,
+                      //         color: Theme.of(context).accentColor),
+                      //     suffixIcon: IconButton(
+                      //       onPressed: () {
+                      //         setState(() {
+                      //           hidePassword = !hidePassword;
+                      //         });
+                      //       },
+                      //       color:
+                      //           Theme.of(context).accentColor.withOpacity(0.4),
+                      //       icon: Icon(hidePassword
+                      //           ? Icons.visibility_off
+                      //           : Icons.visibility),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(height: 50),
+                      Center(
+                        child: GoogleSignInButton(
+                          //  / splashColor: Colors.blue,
+                          darkMode: true,
+                          onPressed: null,
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      new TextFormField(
-                        keyboardType: TextInputType.text,
-                        validator: (input) => input.length < 3
-                            ? "Password shoud be more than 3 characters"
-                            : null,
-                        style: TextStyle(fontSize: 20),
-                        onSaved: (input) => userRequest.password = input,
-                        obscureText: hidePassword,
-                        decoration: new InputDecoration(
-                          hintText: "Password",
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .accentColor
-                                  .withOpacity(0.2),
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).accentColor,
-                            ),
-                          ),
-                          prefixIcon: Icon(Icons.lock,
-                              color: Theme.of(context).accentColor),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                hidePassword = !hidePassword;
-                              });
-                            },
-                            color:
-                                Theme.of(context).accentColor.withOpacity(0.4),
-                            icon: Icon(hidePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 50),
-                      FlatButton(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 12, horizontal: 80),
-                        onPressed: () {
-                          if (validateAndSave()) {
+                      SizedBox(height: 10),
+                      Center(
+                        child: FacebookSignInButton(
+                          onPressed: () async {
                             setState(() {
                               isApiCallProcess = true;
                             });
+                            await _loginWithFacebook();
+                            await _checkLogin();
 
-                            UserAPI api = new UserAPI();
-                            api.loginUser(userRequest).then((value) {
-                              setState(() {
-                                isApiCallProcess = false;
-                              });
-
-                              if (value.authenticate.isNotEmpty) {
-                                final snackbar = SnackBar(
-                                  content: Text("Login Successfull!"),
-                                );
-                                scaffoldKey.currentState.showSnackBar(snackbar);
-                                addUserToSharedPreferences(value);
-                                // sleep(Duration(seconds: 10));
-                                Navigator.pop(context);
-                              } else {
-                                final snackbar = SnackBar(
-                                  content: Text(
-                                      "Email or password is invalid! Please try again!"),
-                                );
-                                scaffoldKey.currentState.showSnackBar(snackbar);
-                              }
-                            });
-                          }
-                        },
-                        child: Text(
-                          "Log In",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
+                            if (_isLoggedIn == true) {
+                              // print(_isLoggedIn);
+                              Navigator.pop(context, true);
+                            }
+                          },
                         ),
-                        color: Theme.of(context).accentColor,
-                        shape: StadiumBorder(),
                       ),
                       // SizedBox(height: 115),
                     ],
                   ),
                 ),
               ),
-            ])
+            ]),
           ],
         ),
       ),

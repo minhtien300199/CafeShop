@@ -56,15 +56,15 @@ class _MyAppState extends State<MyApp> {
               title: Text('Home'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite, color: Colors.red),
+              icon: Icon(Icons.favorite),
               title: Text('Favories'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart, color: Colors.cyan),
+              icon: Icon(Icons.shopping_cart),
               title: Text('Orders'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_box, color: Colors.blue),
+              icon: Icon(Icons.account_box),
               title: Text('Person'),
             ),
           ],
