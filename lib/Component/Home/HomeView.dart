@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class HomeView extends StatefulWidget {
-  HomeView() {}
+  HomeView();
   @override
   _FirstPageState createState() => _FirstPageState();
 }
@@ -122,7 +122,7 @@ class _FirstPageState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final carouselCtrl = CarouselController();
-    final pageStore = PageStorageKey;
+    //final pageStore = PageStorageKey;
     return Scaffold(
         appBar: AppBar(
           title: Text(

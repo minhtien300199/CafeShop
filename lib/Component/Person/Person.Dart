@@ -20,8 +20,8 @@ class _PersonState extends State<Person> {
   final _auth = FirebaseAuth.instance;
   final _facebooklogin = FacebookLogin();
   User userLoggedIn;
-
-  String name;
+  AuthCredential credential;
+  //String name;
   bool _isLoggedIn = false;
   String _message;
   String _userID;
@@ -33,6 +33,7 @@ class _PersonState extends State<Person> {
 
     if (user != null) {
       setState(() {
+        print("person: ${user.toString()}");
         _message = user.displayName;
         //_message = "Logged in as ${user.toString()}";
         _email = user.email;
@@ -75,8 +76,8 @@ class _PersonState extends State<Person> {
         ),
         body: SingleChildScrollView(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
                 children: <Widget>[
@@ -101,7 +102,7 @@ class _PersonState extends State<Person> {
                                     ? "$_avatar"
                                     : "https://i.imgur.com/DErQVbL.png",
                               ),
-                              radius: 80,
+                              radius: 70,
                             ),
                             SizedBox(height: 10),
                             Text(
@@ -140,19 +141,6 @@ class _PersonState extends State<Person> {
                                           ],
                                         ),
                                       ),
-                                      // Expanded(
-                                      //   child: Column(
-                                      //     children: <Widget>[
-                                      //       Text("Email:",
-                                      //           style: TextStyle(
-                                      //               fontSize: 15,
-                                      //               fontWeight:
-                                      //                   FontWeight.bold)),
-                                      //       SizedBox(height: 10),
-                                      //       Text("")
-                                      //     ],
-                                      //   ),
-                                      // ),
                                       Expanded(
                                         child: Column(
                                           children: <Widget>[
@@ -208,6 +196,7 @@ class _PersonState extends State<Person> {
                     )
                   : ListTile(
                       title: Text("Đăng xuất"),
+                      trailing: Icon(Icons.subdirectory_arrow_right),
                       onTap: () {
                         _logout();
                       })

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './ProgressHUD.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginView extends StatefulWidget {
   LoginView({Key key}) : super(key: key);
@@ -17,49 +18,47 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  Person person;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
-  addUserToSharedPreferences(UserResponseModel user) async {
-    SharedPreferences sharedPref = await SharedPreferences.getInstance();
-    sharedPref.setString('stringValue', user.userName);
-  }
-
-  bool hidePassword = true;
-  User userRequest;
   // bool isLoading = false;
   bool isApiCallProcess = false;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  final _auth = FirebaseAuth.instance;
-  final _facebooklogin = FacebookLogin();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FacebookLogin _facebooklogin = FacebookLogin();
+
+  User userRequest;
+  Person person;
   bool _isLoggedIn = false;
-  String _message;
-  String _avatar;
-
-  Future _loginWithFacebook() async {
-    final result = await _facebooklogin.logIn(['email']);
-
-    if (result.status == FacebookLoginStatus.loggedIn) {
-      final credential = FacebookAuthProvider.getCredential(
-          accessToken: result.accessToken.token);
-      //Lấy thông tin User qua credential có giá trị token đã đăng nhập
-      final user = (await _auth.signInWithCredential(credential)).user;
-      setState(() {
-        print((user.toString()));
-        _message = "Logged in as ${user.displayName}";
-        _avatar = user.photoUrl;
-        _isLoggedIn = true;
-      });
+  bool hidePassword = true;
+  Future _loginWithFacebookOrGoogle(bool isLoginWithGoogle) async {
+    AuthCredential credential;
+    if (isLoginWithGoogle) {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      //Sign in google
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      //auth account
+      credential = GoogleAuthProvider.getCredential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      //get token
+    } else {
+      final result = await _facebooklogin.logIn(['email']);
+      if (result.status == FacebookLoginStatus.loggedIn) {
+        credential = FacebookAuthProvider.getCredential(
+            accessToken: result.accessToken.token);
+      }
     }
-  }
 
-  Future _logout() async {
-    // SignOut khỏi Firebase Auth
-    await _auth.signOut();
-    // Logout facebook
-    await _facebooklogin.logOut();
+    //Lấy thông tin User qua credential có giá trị token đã đăng nhập
+    final user = (await _auth.signInWithCredential(credential)).user;
     setState(() {
-      _isLoggedIn = false;
+      print("Successfully!!\n");
+      print((user.toString()));
+      // _message = "Logged in as ${user.displayName}";
+      // _avatar = user.photoUrl;
+
+      _isLoggedIn = true;
     });
   }
 
@@ -76,9 +75,9 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void initState() {
+    _checkLogin();
     super.initState();
     //userRequest = new User();
-    _checkLogin();
   }
 
   @override
@@ -184,7 +183,18 @@ class _LoginViewState extends State<LoginView> {
                         child: GoogleSignInButton(
                           //  / splashColor: Colors.blue,
                           darkMode: true,
-                          onPressed: null,
+                          onPressed: () async {
+                            setState(() {
+                              isApiCallProcess = true;
+                            });
+                            await _loginWithFacebookOrGoogle(true);
+                            await _checkLogin();
+
+                            if (_isLoggedIn == true) {
+                              // print(_isLoggedIn);
+                              Navigator.pop(context, true);
+                            }
+                          },
                         ),
                       ),
                       SizedBox(height: 10),
@@ -194,7 +204,7 @@ class _LoginViewState extends State<LoginView> {
                             setState(() {
                               isApiCallProcess = true;
                             });
-                            await _loginWithFacebook();
+                            await _loginWithFacebookOrGoogle(false);
                             await _checkLogin();
 
                             if (_isLoggedIn == true) {
