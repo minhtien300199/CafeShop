@@ -95,18 +95,21 @@ class _OrderPageState extends State<OrderPage>
                                       children: <Widget>[
                                         Text(
                                           product.productName,
-                                          style: TextStyle(fontSize: 15),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.red[300]),
                                         ),
                                         Text(product.productDescription,
-                                            style: TextStyle(fontSize: 10)),
-                                        Text('Price: 50,000 VNĐ'),
+                                            style: TextStyle(fontSize: 15)),
+                                        Text('Price: ${product.price} VNĐ'),
                                         SizedBox(
                                           width: 110,
                                           child: RaisedButton.icon(
                                             onPressed: () => {},
                                             icon: Icon(Icons.add_shopping_cart),
                                             label: Text("Detail"),
-                                            color: Colors.orange,
+                                            color: Colors.lightBlueAccent[100],
                                             padding: EdgeInsets.all(10),
                                           ),
                                         ),
@@ -116,7 +119,7 @@ class _OrderPageState extends State<OrderPage>
                                             onPressed: () => {},
                                             icon: Icon(Icons.favorite_border),
                                             label: Text("Favorite"),
-                                            color: Colors.orange,
+                                            color: Colors.lightBlueAccent[100],
                                             padding: EdgeInsets.all(10),
                                           ),
                                         ),
@@ -131,11 +134,14 @@ class _OrderPageState extends State<OrderPage>
                                       children: <Widget>[
                                         Text(
                                           product.productName,
-                                          style: TextStyle(fontSize: 15),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.red[300]),
                                         ),
                                         Text(product.productDescription,
-                                            style: TextStyle(fontSize: 10)),
-                                        Text('Price: 50,000 VNĐ'),
+                                            style: TextStyle(fontSize: 15)),
+                                        Text('Price: ${product.price} VNĐ'),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -147,7 +153,8 @@ class _OrderPageState extends State<OrderPage>
                                                 icon: Icon(
                                                     Icons.add_shopping_cart),
                                                 label: Text("Detail"),
-                                                color: Colors.orange,
+                                                color:
+                                                    Colors.lightBlueAccent[100],
                                                 padding: EdgeInsets.all(10),
                                               ),
                                             ),
@@ -158,7 +165,8 @@ class _OrderPageState extends State<OrderPage>
                                                 icon:
                                                     Icon(Icons.favorite_border),
                                                 label: Text("Favorite"),
-                                                color: Colors.orange,
+                                                color:
+                                                    Colors.lightBlueAccent[100],
                                                 padding: EdgeInsets.all(10),
                                               ),
                                             ),
