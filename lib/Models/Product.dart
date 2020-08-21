@@ -2,6 +2,9 @@ class Product {
   String id;
   String productName;
   String productDescription;
+  String hot;
+  String popular;
+  String price;
   String categoryId;
   String mainImage;
   List<dynamic> sizes;
@@ -11,6 +14,9 @@ class Product {
       this.productName,
       this.productDescription,
       this.sizes,
+      this.hot,
+      this.popular,
+      this.price,
       this.categoryId,
       this.images,
       this.mainImage});
@@ -19,6 +25,9 @@ class Product {
         id: json['id'],
         productName: json['productName'],
         productDescription: json['productDescription'],
+        hot: json['hot'],
+        popular: json['popular'],
+        price: json['price'],
         sizes: json['sizes'],
         categoryId: json['categoryId'],
         images: json['images'],

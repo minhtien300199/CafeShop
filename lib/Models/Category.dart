@@ -15,6 +15,9 @@ class Category {
           id: item['id'],
           productName: item['productName'],
           productDescription: item['productDescription'],
+          price: item['price'],
+          hot: item['hot'],
+          popular: item['popular'],
           categoryId: item['categoryId'],
           mainImage: item['mainImage']));
     }
