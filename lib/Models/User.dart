@@ -14,42 +14,20 @@ class UserResponseModel {
 }
 
 class User {
-  String id;
-  String userName;
-  String fullName;
-  String photoUrl;
-  String email;
-  String password;
-  String authenticate;
-  String createdAt;
-  String updatedAt;
-  String phoneNumber;
-  User(
-      {this.id,
-      this.userName,
-      this.password,
-      this.authenticate,
-      this.createdAt,
-      this.updatedAt,
-      this.fullName,
-      this.email,
-      this.photoUrl,
-      this.phoneNumber});
+  String userId;
+
+  User({
+    this.userId,
+  });
   Map<String, dynamic> get map {
     return {
-      "id": id,
-      "password": password.trim(),
-      "fullName": fullName,
-      'email': email,
-      'photoUrl': photoUrl,
-      'phoneNumber': phoneNumber
+      "uid": userId,
     };
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'userName': userName.trim(),
-      'password': password.trim(),
+      'id': userId.trim(),
     };
     return map;
   }

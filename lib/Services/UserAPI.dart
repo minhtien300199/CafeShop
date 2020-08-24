@@ -7,11 +7,12 @@ import '../Models/User.dart';
 
 // User _user;
 class UserAPI {
-  Future<UserResponseModel> loginUser(User requestUser) async {
-    String url = "http://192.168.1.2:8000/login";
+  Future addUser(User requestUser) async {
+    String url = "http://192.168.1.2:8000/user/add";
     final response = await http.post(url, body: requestUser.toJson());
+    print(response);
     if (response.statusCode == 200 || response.statusCode == 400) {
-      return UserResponseModel.fromJson(json.decode(response.body));
+      return true;
     } else {
       throw new Exception("Failed to load Data");
     }

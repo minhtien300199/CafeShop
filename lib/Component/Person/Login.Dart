@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cafeshop/Models/User.dart';
+import 'package:cafeshop/Services/UserAPI.dart';
 import '../Person/Person.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,9 @@ class _LoginViewState extends State<LoginView> {
   final FacebookLogin _facebooklogin = FacebookLogin();
 
   User userRequest;
+
   Person person;
+  UserAPI userApi = new UserAPI();
   bool _isLoggedIn = false;
   bool hidePassword = true;
   Future _loginWithFacebookOrGoogle(bool isLoginWithGoogle) async {
@@ -55,11 +58,14 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       print("Successfully!!\n");
       print((user.toString()));
-      // _message = "Logged in as ${user.displayName}";
-      // _avatar = user.photoUrl;
-
       _isLoggedIn = true;
     });
+    if (_isLoggedIn == true) {
+      var user = await _auth.currentUser();
+      // User userRequest = new User();
+
+      await userApi.addUser(User(userId: user.uid));
+    }
   }
 
   Future _checkLogin() async {
