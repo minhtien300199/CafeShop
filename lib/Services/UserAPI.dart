@@ -8,7 +8,7 @@ import '../Models/User.dart';
 // User _user;
 class UserAPI {
   Future addUser(User requestUser) async {
-    String url = "http://192.168.1.2:8000/user/add";
+    String url = "http://192.168.1.6:8000/user/add";
     final response = await http.post(url, body: requestUser.toJson());
     print(response);
     if (response.statusCode == 200 || response.statusCode == 400) {

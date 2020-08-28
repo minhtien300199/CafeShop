@@ -75,132 +75,141 @@ class _PersonState extends State<Person> {
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.blue, Colors.pink[200]]),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      height: 350.0,
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                _isLoggedIn
-                                    ? "$_avatar"
-                                    : "https://i.imgur.com/DErQVbL.png",
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.blue, Colors.pink[200]]),
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  _isLoggedIn
+                                      ? "$_avatar"
+                                      : "https://i.imgur.com/DErQVbL.png",
+                                ),
+                                radius: 70,
                               ),
-                              radius: 70,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              _isLoggedIn == true ? _message : "Khách",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 5),
-                            Text(_isLoggedIn ? _email : " ",
+                              SizedBox(height: 10),
+                              Text(
+                                _isLoggedIn == true ? _message : "Khách",
                                 style: TextStyle(
-                                    fontSize: 15, color: Colors.black)),
-                            SizedBox(height: 10),
-                            Card(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 5),
-                              clipBehavior: Clip.antiAlias,
-                              shadowColor: Colors.black,
-                              elevation: 5,
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 22),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text("Số điện thoại",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            SizedBox(height: 10),
-                                            Text("")
-                                          ],
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text(_isLoggedIn ? _email : " ",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)),
+                              SizedBox(height: 10),
+                              Card(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                clipBehavior: Clip.antiAlias,
+                                shadowColor: Colors.black,
+                                elevation: 5,
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 22),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text("Số điện thoại",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(height: 10),
+                                              Text("")
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text("Sinh nhật",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            SizedBox(height: 10),
-                                            Text("")
-                                          ],
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text("Sinh nhật",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              SizedBox(height: 10),
+                                              Text("")
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          ],
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              ListTile(
-                  title: Text('Thay đổi thông tin'),
-                  trailing: Icon(Icons.edit),
-                  onTap: () {
-                    Route route =
-                        MaterialPageRoute(builder: (context) => Profile());
-                    Navigator.push(context, route);
-                  }),
-              ListTile(
-                  title: Text('Đơn hàng đã mua'),
-                  trailing: Icon(Icons.assignment),
-                  onTap: null),
-              ListTile(
-                  title: Text('Thông tin thanh toán'),
-                  trailing: Icon(Icons.payment),
-                  onTap: null),
-              _isLoggedIn == false
-                  ? ListTile(
-                      title: Text('Đăng nhập'),
-                      trailing: Icon(Icons.accessibility),
-                      onTap: () async => {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginView(),
-                          ),
-                        ),
-                        _checkLogin(),
-                      },
-                    )
-                  : ListTile(
-                      title: Text("Đăng xuất"),
-                      trailing: Icon(Icons.subdirectory_arrow_right),
-                      onTap: () {
-                        _logout();
-                      })
-            ],
+                  ],
+                ),
+                Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: Column(
+                      children: [
+                        ListTile(
+                            title: Text('Thay đổi thông tin'),
+                            trailing: Icon(Icons.edit),
+                            onTap: () {
+                              Route route = MaterialPageRoute(
+                                  builder: (context) => Profile());
+                              Navigator.push(context, route);
+                            }),
+                        ListTile(
+                            title: Text('Đơn hàng đã mua'),
+                            trailing: Icon(Icons.assignment),
+                            onTap: null),
+                        ListTile(
+                            title: Text('Thông tin thanh toán'),
+                            trailing: Icon(Icons.payment),
+                            onTap: null),
+                        _isLoggedIn == false
+                            ? ListTile(
+                                title: Text('Đăng nhập'),
+                                trailing: Icon(Icons.accessibility),
+                                onTap: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginView(),
+                                    ),
+                                  ),
+                                  _checkLogin(),
+                                },
+                              )
+                            : ListTile(
+                                title: Text("Đăng xuất"),
+                                trailing: Icon(Icons.subdirectory_arrow_right),
+                                onTap: () {
+                                  _logout();
+                                })
+                      ],
+                    )),
+              ],
+            ),
           ),
         ),
       ),

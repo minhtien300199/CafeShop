@@ -1,7 +1,6 @@
 import 'package:cafeshop/Models/ListCategory.dart';
 import 'package:cafeshop/Path.dart';
 import 'package:cafeshop/Services/CategoryAPI.dart';
-import 'package:cafeshop/uri.dart';
 import 'package:flutter/material.dart';
 
 class OrderPage extends StatefulWidget {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cafeshop/Models/ListProducts.dart';
 import 'package:cafeshop/Models/Product.dart';
-import 'package:cafeshop/uri.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Models/Product.dart';
