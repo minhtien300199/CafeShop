@@ -86,9 +86,10 @@ class _PersonState extends State<Person> {
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.blue, Colors.pink[200]]),
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          //colors: [Colors.blue, Colors.pink[200]]
+                        ),
                       ),
                       child: Container(
                         width: double.infinity,

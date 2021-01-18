@@ -1,3 +1,5 @@
+import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
+import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import './Component/Person/Login.dart';
 import './Component/Favorite/FavoriteView.dart';
@@ -14,6 +16,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
+  List<Color> navItemColor = [
+    Colors.white,
+    Colors.pink,
+    Colors.white,
+    Colors.yellow
+  ];
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
@@ -49,30 +57,28 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          items: <CustomBottomNavigationBarItem>[
+            CustomBottomNavigationBarItem(
+              icon: Icons.home,
+              title: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              title: Text('Favories'),
+            CustomBottomNavigationBarItem(
+              icon: Icons.favorite,
+              title: 'Favories',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              title: Text('Orders'),
+            CustomBottomNavigationBarItem(
+              icon: Icons.shopping_cart,
+              title: 'Orders',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_box),
-              title: Text('Person'),
+            CustomBottomNavigationBarItem(
+              icon: Icons.account_box,
+              title: 'Person',
             ),
           ],
-          currentIndex: _selectedIndex,
-          // selectedIconTheme: Colors.amber[800],
-          selectedItemColor: Colors.amber[800],
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
+          selectedItemColor: navItemColor[_selectedIndex],
+          backgroundColor: Colors.green,
+          // type: BottomNavigationBarType.fixed,
           unselectedItemColor: Colors.black87,
           onTap: _onItemTapped,
         ),

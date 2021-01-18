@@ -4,8 +4,8 @@ import '../Models/ListCategory.dart';
 import 'package:http/http.dart' as http;
 
 Future<ListCategory> fetchCategory() async {
-  final response = await http.get(
-      Uri.encodeFull("https://caffeeshopbackend.herokuapp.com/category/all"));
+  final response =
+      await http.get(Uri.encodeFull("http://192.168.0.166:8000/category/all"));
   if (response.statusCode == 200) {
     print(jsonDecode(response.body)['data']);
     List<dynamic> list = jsonDecode(response.body)['data']

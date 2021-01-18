@@ -1,5 +1,6 @@
+import 'package:cafeshop/Component/Common/CustomAppBar.dart';
 import 'package:cafeshop/Models/ListProducts.dart';
-import 'package:cafeshop/Path.dart';
+import 'package:cafeshop/Utils/Path.dart';
 import 'package:cafeshop/Services/ProductsAPI.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -27,7 +28,7 @@ class _FirstPageState extends State<HomeView> {
     setState(() {
       active = value;
     });
-    print("value is $value and total is: $total");
+    // print("value is $value and total is: $total");
   }
 
   // final _formKey = GlobalKey<FormState>();
@@ -66,34 +67,37 @@ class _FirstPageState extends State<HomeView> {
                       return Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
                             border: Border(
-                          top: BorderSide(
-                              width: 1,
-                              color: Colors.black,
-                              style: BorderStyle.solid),
-                          right: BorderSide(
-                              width: 1,
-                              color: Colors.black,
-                              style: BorderStyle.solid),
-                          bottom: BorderSide(
-                              width: 1,
-                              color: Colors.black,
-                              style: BorderStyle.solid),
-                          left: BorderSide(
-                              width: 1,
-                              color: Colors.black,
-                              style: BorderStyle.solid),
-                        )),
+                              top: BorderSide(
+                                  width: 1,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid),
+                              right: BorderSide(
+                                  width: 1,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid),
+                              bottom: BorderSide(
+                                  width: 1,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid),
+                              left: BorderSide(
+                                  width: 1,
+                                  color: Colors.white,
+                                  style: BorderStyle.solid),
+                            )),
                         child: Stack(
                           alignment: Alignment.bottomCenter,
                           children: [
                             new Positioned(
                                 width: constraints.biggest.width,
                                 height: constraints.biggest.height,
-                                child: Image.network(
-                                  path['google-store'] + item.mainImage,
-                                  fit: BoxFit.fill,
-                                )),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Image.network(
+                                      path['google-store'] + item.mainImage,
+                                      fit: BoxFit.fill,
+                                    ))),
                             Text(
                               "${item.productName}",
                               style: TextStyle(
@@ -124,30 +128,31 @@ class _FirstPageState extends State<HomeView> {
     final carouselCtrl = CarouselController();
     //final pageStore = PageStorageKey;
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Home",
-            style: TextStyle(color: Colors.black),
+        appBar: CustomAppBar(
+          color: Colors.green,
+          height: MediaQuery.of(context).size.height * 0.12,
+          child: Stack(
+            children: [
+              Positioned(
+                  child: Container(
+                child: Center(
+                  child: Text("Home"),
+                ),
+              ))
+            ],
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: null,
-            )
-          ],
-          backgroundColor: Colors.white,
         ),
         body: Container(
             padding: EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
-            child: Column(
+            child: ListView(
               children: [
                 Center(
                   child: Text(
-                    "Best sale",
+                    "BEST SALE",
                     style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 30,
-                    ),
+                        color: Colors.red,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800),
                   ),
                 ),
                 customCarousel(carouselCtrl, this.updateList),
@@ -171,3 +176,19 @@ class _FirstPageState extends State<HomeView> {
             )));
   }
 }
+
+/****
+ AppBar(
+              title: Text(
+                "Home",
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: null,
+                )
+              ],
+              backgroundColor: Colors.white,
+            )
+ */

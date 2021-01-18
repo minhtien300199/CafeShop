@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import '../Models/Product.dart';
 
 Future<ListProduct> fetchProduct() async {
-  final response = await http.get(Uri.encodeFull(
-      "https://caffeeshopbackend.herokuapp.com/products/hotproduct"));
+  final response = await http
+      .get(Uri.encodeFull("http://192.168.0.166:8000/products/hotproduct"));
   if (response.statusCode == 200) {
     var list = jsonDecode(response.body)['data']
         .map((item) => Product.fromJson(item))
