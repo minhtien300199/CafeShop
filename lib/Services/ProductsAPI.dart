@@ -7,7 +7,7 @@ import '../Models/Product.dart';
 
 Future<ListProduct> fetchProduct() async {
   final response = await http
-      .get(Uri.encodeFull("http://192.168.0.166:8000/products/hotproduct"));
+      .get(Uri.encodeFull("http://hieuit.tech:8000/products/hotproduct"));
   if (response.statusCode == 200) {
     var list = jsonDecode(response.body)['data']
         .map((item) => Product.fromJson(item))

@@ -1,10 +1,13 @@
 import 'package:cafeshop/Component/Common/CustomAppBar.dart';
+import 'package:cafeshop/Component/Home/SecondPage.dart';
 import 'package:cafeshop/Models/ListProducts.dart';
 import 'package:cafeshop/Utils/Path.dart';
 import 'package:cafeshop/Services/ProductsAPI.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class HomeView extends StatefulWidget {
@@ -17,6 +20,7 @@ class _FirstPageState extends State<HomeView> {
   String passValue = '';
   String fromChild = '';
   int active = 0;
+  final pageCtl = PageController(initialPage: 0);
   int total = 1;
   updateTitle(String data) {
     setState(() {
@@ -123,6 +127,7 @@ class _FirstPageState extends State<HomeView> {
     );
   }
 
+//home
   @override
   Widget build(BuildContext context) {
     final carouselCtrl = CarouselController();
@@ -131,64 +136,87 @@ class _FirstPageState extends State<HomeView> {
         appBar: CustomAppBar(
           color: Colors.green,
           height: MediaQuery.of(context).size.height * 0.12,
-          child: Stack(
+          child: Column(
             children: [
-              Positioned(
-                  child: Container(
-                child: Center(
-                  child: Text("Home"),
-                ),
+              Expanded(child: Container()),
+              Expanded(
+                  child: Stack(
+                children: [
+                  Positioned(
+                      child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.menu,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {}),
+                        Text(
+                          "Home",
+                          style: GoogleFonts.lato(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 30,
+                              color: Colors.white),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {})
+                      ],
+                    ),
+                  ))
+                ],
               ))
             ],
           ),
         ),
-        body: Container(
-            padding: EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
-            child: ListView(
-              children: [
-                Center(
-                  child: Text(
-                    "BEST SALE",
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800),
-                  ),
-                ),
-                customCarousel(carouselCtrl, this.updateList),
-                FutureBuilder(
-                  future: store,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Center(
-                        child: DotsIndicator(
-                          dotsCount: this.total,
-                          position: this.active.toDouble(),
+        body: PageView(
+          controller: pageCtl,
+          scrollDirection: Axis.vertical,
+          children: [
+            //1st page
+            Container(
+                padding:
+                    EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
+                child: ListView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    Center(
+                      child: Text(
+                        "BEST SALE",
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
                         ),
-                      );
-                    }
-                    return JumpingDotsProgressIndicator(
-                      fontSize: 50.0,
-                    );
-                  },
-                )
-              ],
-            )));
+                      ),
+                    ),
+                    customCarousel(carouselCtrl, this.updateList),
+                    FutureBuilder(
+                      future: store,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Center(
+                            child: DotsIndicator(
+                              dotsCount: this.total,
+                              position: this.active.toDouble(),
+                            ),
+                          );
+                        }
+                        return JumpingDotsProgressIndicator(
+                          fontSize: 50.0,
+                        );
+                      },
+                    )
+                  ],
+                )),
+            //2nd page
+            SecondPage()
+          ],
+        ));
   }
 }
-
-/****
- AppBar(
-              title: Text(
-                "Home",
-                style: TextStyle(color: Colors.black),
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: null,
-                )
-              ],
-              backgroundColor: Colors.white,
-            )
- */

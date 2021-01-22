@@ -84,13 +84,6 @@ class _PersonState extends State<Person> {
                 Column(
                   children: <Widget>[
                     Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          //colors: [Colors.blue, Colors.pink[200]]
-                        ),
-                      ),
                       child: Container(
                         width: double.infinity,
                         height: MediaQuery.of(context).size.height * 0.5,
