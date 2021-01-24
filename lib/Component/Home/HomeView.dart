@@ -181,7 +181,7 @@ class _FirstPageState extends State<HomeView> {
             //1st page
             Container(
                 padding:
-                    EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 20),
+                    EdgeInsets.only(left: 10, top: 20, bottom: 20, right: 10),
                 child: ListView(
                   physics: NeverScrollableScrollPhysics(),
                   children: [
@@ -211,11 +211,12 @@ class _FirstPageState extends State<HomeView> {
                           fontSize: 50.0,
                         );
                       },
-                    )
+                    ),
+                    SecondPage()
                   ],
                 )),
             //2nd page
-            SecondPage()
+            // SecondPage()
           ],
         ));
   }
