@@ -1,5 +1,5 @@
 import 'package:cafeshop/Component/Common/CustomAppBar.dart';
-import 'package:cafeshop/Component/Home/SecondPage.dart';
+import 'package:cafeshop/Component/Home/OrderBtnBar.dart';
 import 'package:cafeshop/Models/ListProducts.dart';
 import 'package:cafeshop/Utils/Path.dart';
 import 'package:cafeshop/Services/ProductsAPI.dart';
@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+
+import 'SecondPage.dart';
 
 class HomeView extends StatefulWidget {
   HomeView();
@@ -212,11 +214,14 @@ class _FirstPageState extends State<HomeView> {
                         );
                       },
                     ),
-                    SecondPage()
+                    Divider(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    OrderBtnBar()
                   ],
                 )),
             //2nd page
-            // SecondPage()
+            SecondPage()
           ],
         ));
   }
